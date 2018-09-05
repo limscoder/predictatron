@@ -1,0 +1,2 @@
+# predator
+crypto price prediction
