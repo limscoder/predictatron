@@ -1,0 +1,16 @@
+global:
+  scrape_interval:     15s
+  evaluation_interval: 15s
+alerting:
+  alertmanagers:
+  - static_configs:
+    - targets:
+rule_files:
+scrape_configs:
+  - job_name: marketcap
+    scrape_interval: 45s
+    scrape_timeout: 10s
+    metrics_path: /marketcap
+    scheme: http
+    static_configs:
+    - targets: ['us-central1-starry-tracker-215615.cloudfunctions.net']
