@@ -7,10 +7,17 @@ alerting:
     - targets:
 rule_files:
 scrape_configs:
-  - job_name: marketcap
-    scrape_interval: 45s
-    scrape_timeout: 10s
-    metrics_path: /marketcap
+  - job_name: coin
+    scrape_interval: 1m
+    scrape_timeout: 15s
+    metrics_path: /coin
+    scheme: http
+    static_configs:
+    - targets: ['us-central1-starry-tracker-215615.cloudfunctions.net']
+  - job_name: predict-linear
+    scrape_interval: 1m
+    scrape_timeout: 45s
+    metrics_path: /linear
     scheme: http
     static_configs:
     - targets: ['us-central1-starry-tracker-215615.cloudfunctions.net']

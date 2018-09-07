@@ -1,2 +1,2 @@
 # predator
-crypto price prediction
+time series prediction framework

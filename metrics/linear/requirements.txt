@@ -1,0 +1,2 @@
+prometheus_client==0.3.1
+git+https://github.com/limscoder/predator.git@0041959887a87276b5a010708c81b1580360e6cf#egg=promutil&subdirectory=pkg/promutil
