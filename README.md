@@ -1,2 +1,2 @@
-# predator
+# predictatron
 time series prediction framework
