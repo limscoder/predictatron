@@ -53,28 +53,71 @@ function getDomains(datapoints, height, width) {
   });
 
   const x = [new Date(minX * 1000), new Date(maxX * 1000)];
-  const y = [maxY, minY];
+  const y = [minY, maxY];
   return { x, y };
 }
 
-function drawTooltip(svg, datapoints, xScale, yScale) {
-  const tip = d3
-    .select("body")
-    .append("div")
-    .html("hey bro!")
-    .style("display", "none")
-    .style("position", "absolute");
+function findClosestValue(x, values, xScale) {
+  let closest = parseFloat(values[0]);
+  values.forEach(value => {
+    const valueX = xScale(parseDate(value));
+    if (valueX <= x) {
+      closest = parseValue(value);
+    }
+  });
+  return closest;
+}
 
-  svg.on("mouseover", d => {
-    // find nearest datapoints!
+function drawTooltip(svg, datapoints, height, width, xScale) {
+  const marker = svg
+    .append("line")
+    .attr("x1", 0)
+    .attr("y1", 0)
+    .attr("x2", 0)
+    .attr("y2", 0)
+    .style("stroke", "orange")
+    .style("stroke-width", "2");
+  const metricLabel = svg.append("text");
+  const predictLabel = svg.append("text");
+  const clearTip = () => {
+    marker.attr("x1", 0).attr("y1", 0).attr("x2", 0).attr("y2", 0);
+    metricLabel.text("");
+    predictLabel.text("");
+  };
 
-    tip
-      .style("display", "block")
-      .style("left", d3.event.pageX + 30 + "px")
-      .style("top", d3.event.pageY - 30 + "px");
+  svg.on("mousemove", d => {
+    const { clientX } = d3.event;
+    const x = clientX - margin.left * 2;
+    const y = height;
+    if (x < margin.left) {
+      clearTip();
+      return;
+    }
+    marker.attr("x1", x).attr("y1", 0).attr("x2", x).attr("y2", y);
+
+    const metricValue = findClosestValue(x, datapoints.metric.values, xScale);
+    const predictKey = Object.keys(datapoints).find(k => k !== "metric");
+    const predictValue = findClosestValue(
+      x,
+      datapoints[predictKey].values,
+      xScale
+    );
+
+    metricLabel.text(`value: $${metricValue.toFixed(2)}`).attr("y", y / 2);
+    predictLabel
+      .text(`predicted: $${predictValue.toFixed(2)}`)
+      .attr("y", 20 + y / 2);
+
+    if (x > width / 2) {
+      metricLabel.attr("x", x - 10).style("text-anchor", "end");
+      predictLabel.attr("x", x - 10).style("text-anchor", "end");
+    } else {
+      metricLabel.attr("x", x + 10).style("text-anchor", "start");
+      predictLabel.attr("x", x + 10).style("text-anchor", "start");
+    }
   });
   svg.on("mouseout", d => {
-    tip.style("display", "none");
+    clearTip();
   });
 }
 
@@ -121,7 +164,11 @@ function drawChart(el, datapoints, height, width) {
   drawAxis(svg, xScale, yScale, height, width);
 
   const lineGroup = svg.append("g");
-  Object.keys(datapoints).forEach(k => {
+  ["60m", "30m", "15m", "5m", "metric"].forEach(k => {
+    if (!datapoints.hasOwnProperty(k)) {
+      return;
+    }
+
     const line = d3
       .line()
       .curve(d3.curveBasis)
@@ -133,11 +180,11 @@ function drawChart(el, datapoints, height, width) {
       .append("path")
       .attr("d", line(datapoints[k].values))
       .style("fill", "none")
-      .style("stroke", seriesColors[k])
-      .style("stroke-width", k === "metric" ? "3" : "1");
+      .style("stroke", seriesColors[k] || "black")
+      .style("stroke-width", k === "metric" ? "3" : "2");
   });
 
-  // drawTooltip(svg, datapoints, xScale, yScale);
+  drawTooltip(svg, datapoints, height, width, xScale);
 }
 
 export default class Chart extends Component {
@@ -148,7 +195,7 @@ export default class Chart extends Component {
 
   componentDidMount() {
     const width = this.box.getBoundingClientRect().width;
-    const height = width * (1 / 3);
+    const height = Math.min(width * (1 / 3), 400);
     drawChart(this.box, this.props.datapoints, height, width);
     this.setState({ height, width });
   }

@@ -49,11 +49,6 @@ const Select = styled.select`
   font-size: 24px;
   margin-left: 8px;
 `;
-const CheckboxInput = styled.input`
-  border: none;
-  margin: 8px 6px 0 12px;
-  transform: scale(1.5);
-`;
 
 export default class Form extends Component {
   render() {
@@ -91,35 +86,35 @@ export default class Form extends Component {
             </OptionSet>
           </Options>
           <Options>
-            <Label>Future Times:</Label>
-            <CheckboxInput
-              type="checkbox"
-              name="5m"
-              value="5"
-              defaultChecked={true}
-            />
-            <Label>5m</Label>
-            <CheckboxInput
-              type="checkbox"
-              name="15m"
-              value="15"
-              defaultChecked={true}
-            />
-            <Label>15m</Label>
-            <CheckboxInput
-              type="checkbox"
-              name="30m"
-              value="30"
-              defaultChecked={true}
-            />
-            <Label>30m</Label>
-            <CheckboxInput
-              type="checkbox"
-              name="60m"
-              value="60"
-              defaultChecked={true}
-            />
-            <Label>60m</Label>
+            <OptionSet>
+              <div>
+                <Label>Past:</Label>
+              </div>
+              <div>
+                <Select innerRef={el => this.pastInput = el}>
+                  <option value="1800">30m</option>
+                  <option value="3600">60m</option>
+                  <option value="21600">6h</option>
+                  <option value="43200">12h</option>
+                  <option value="86400">24h</option>
+                  <option value="172800">2d</option>
+                  <option value="604800">1w</option>
+                </Select>
+              </div>
+            </OptionSet>
+            <OptionSet>
+              <div>
+                <Label>Future:</Label>
+              </div>
+              <div>
+                <Select innerRef={el => this.futureInput = el}>
+                  <option value="5m">5m</option>
+                  <option value="15m">15m</option>
+                  <option value="30m">30m</option>
+                  <option value="60m">60m</option>
+                </Select>
+              </div>
+            </OptionSet>
           </Options>
           <ButtonInput
             type="button"
@@ -141,7 +136,9 @@ export default class Form extends Component {
     return {
       promURL: this.serverInput.value,
       predictMetric: this.metricInput.value,
-      predictMethod: this.predictInput.value
+      predictMethod: this.predictInput.value,
+      predictPast: this.pastInput.value,
+      predictFuture: this.futureInput.value
     };
   }
 }

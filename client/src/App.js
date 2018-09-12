@@ -36,10 +36,11 @@ function fetchRange(
   query,
   target,
   duration = 60 * 60 * 3 * 1000,
+  offset = 0,
   step = 10
 ) {
   const now = new Date().toISOString();
-  const then = new Date(Date.now() - duration).toISOString();
+  const then = new Date(Date.now() - duration - offset).toISOString();
   const e = encodeURIComponent;
   const req = new Request(
     `${URL}/api/v1/query_range?query=${e(query)}&start=${e(then)}&end=${e(now)}&step=${e(step)}`
@@ -52,6 +53,18 @@ function fetchRange(
     .then(resp => resp.json())
     .then(content => {
       content.target = target;
+      if (content.status === "success" && offset) {
+        const offsetSeconds = offset / 1000;
+        content.data.result = content.data.result.map(result => {
+          return {
+            ...result,
+            values: result.values.map(value => {
+              return [value[0] + offsetSeconds, value[1]];
+            })
+          };
+        });
+      }
+
       return content;
     });
 }
@@ -111,9 +124,29 @@ export default class App extends Component {
       })
     );
 
-    const { promURL, predictMetric } = formData;
-    fetchRange(promURL, predictMetric, "metric").then(content => {
-      const datapoints = groupDatapoints([content]);
+    const {
+      promURL,
+      predictMetric,
+      predictMethod,
+      predictFuture,
+      predictPast
+    } = formData;
+    const duration = parseInt(predictPast, 10) * 1000;
+    const futureMinutes = predictFuture.substr(0, predictFuture.length - 1);
+    const futureSeconds = parseInt(futureMinutes, 10) * 60;
+    const predictQuery = `${predictMethod}:${predictMetric}{predict_duration="${futureMinutes}"}`;
+
+    Promise.all([
+      fetchRange(promURL, predictMetric, "metric", duration),
+      fetchRange(
+        promURL,
+        predictQuery,
+        predictFuture,
+        duration,
+        futureSeconds * 1000
+      )
+    ]).then(content => {
+      const datapoints = groupDatapoints(content);
       this.setState(
         update(this.state, {
           graphs: { [graphIdx]: { datapoints: { $set: datapoints } } }
