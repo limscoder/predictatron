@@ -88,8 +88,24 @@ export default class App extends Component {
     super(props);
 
     this.state = {
-      graphs: [{}]
+      graphs: [
+        {
+          defaults: {
+            promURL: "http://130.211.204.92:9090",
+            predictMetric: "btc_usd",
+            predictMethod: "predict_linear",
+            predictPast: "43200",
+            predictFuture: "15m"
+          }
+        }
+      ]
     };
+  }
+
+  componentDidMount() {
+    this.state.graphs.forEach((graph, idx) =>
+      this.onExecute(graph.defaults, idx)
+    );
   }
 
   render() {
@@ -98,6 +114,7 @@ export default class App extends Component {
         <Graph
           key={idx}
           graphData={graphData}
+          onDuplicate={formData => this.onDuplicate(formData, idx)}
           onExecute={formData => this.onExecute(formData, idx)}
         />
       );
@@ -117,10 +134,24 @@ export default class App extends Component {
     );
   }
 
+  onDuplicate(formData, graphIdx) {
+    const insertIdx = graphIdx + 1;
+    const inserted = this.state.graphs.slice(0, this.state.graphs.length);
+    inserted.splice(insertIdx, 0, { defaults: formData });
+    this.setState({ graphs: inserted }, () =>
+      this.onExecute(formData, insertIdx)
+    );
+  }
+
   onExecute(formData, graphIdx) {
     this.setState(
       update(this.state, {
-        graphs: { [graphIdx]: { datapoints: { $set: false } } }
+        graphs: {
+          [graphIdx]: {
+            datapoints: { $set: false },
+            defaults: { $set: formData }
+          }
+        }
       })
     );
 
@@ -153,7 +184,5 @@ export default class App extends Component {
         })
       );
     });
-
-    // const query = `${formData.predictMethod}:${formData.predictMetric}`;
   }
 }

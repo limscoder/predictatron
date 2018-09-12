@@ -14,7 +14,13 @@ const LoadingBox = styled.div`
 
 export default class Graph extends Component {
   render() {
-    const form = <Form onExecute={this.props.onExecute} />;
+    const form = (
+      <Form
+        defaults={this.props.graphData.defaults}
+        onExecute={this.props.onExecute}
+        onDuplicate={this.props.onDuplicate}
+      />
+    );
 
     let chart;
     const datapoints = this.props.graphData.datapoints;

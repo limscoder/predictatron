@@ -52,6 +52,8 @@ const Select = styled.select`
 
 export default class Form extends Component {
   render() {
+    const { defaults } = this.props;
+
     return (
       <FormBox>
         <form>
@@ -59,7 +61,7 @@ export default class Form extends Component {
             <Label>Prometheus Server:</Label>
             <TextInput
               innerRef={el => this.serverInput = el}
-              defaultValue="http://130.211.204.92:9090"
+              defaultValue={defaults.promURL}
             />
           </FieldSet>
           <Options>
@@ -68,9 +70,16 @@ export default class Form extends Component {
                 <Label>Metric:</Label>
               </div>
               <div>
-                <Select innerRef={el => this.metricInput = el}>
-                  <option value="btc_usd">BTC - Bitcoin</option>
-                  <option value="eth_uds">ETH - Ether</option>
+                <Select
+                  innerRef={el => this.metricInput = el}
+                  defaultValue={defaults.predictMetric}
+                >
+                  <option value="btc_usd">
+                    BTC - Bitcoin
+                  </option>
+                  <option value="eth_usd">
+                    ETH - Ether
+                  </option>
                 </Select>
               </div>
             </OptionSet>
@@ -79,8 +88,13 @@ export default class Form extends Component {
                 <Label>Prediction:</Label>
               </div>
               <div>
-                <Select innerRef={el => this.predictInput = el}>
-                  <option value="predict_linear">Linear</option>
+                <Select
+                  innerRef={el => this.predictInput = el}
+                  defaultValue={defaults.predictMethod}
+                >
+                  <option value="predict_linear">
+                    Linear
+                  </option>
                 </Select>
               </div>
             </OptionSet>
@@ -91,14 +105,31 @@ export default class Form extends Component {
                 <Label>Past:</Label>
               </div>
               <div>
-                <Select innerRef={el => this.pastInput = el}>
-                  <option value="1800">30m</option>
-                  <option value="3600">60m</option>
-                  <option value="21600">6h</option>
-                  <option value="43200">12h</option>
-                  <option value="86400">24h</option>
-                  <option value="172800">2d</option>
-                  <option value="604800">1w</option>
+                <Select
+                  innerRef={el => this.pastInput = el}
+                  defaultValue={defaults.predictPast}
+                >
+                  <option value="1800">
+                    30m
+                  </option>
+                  <option value="3600">
+                    60m
+                  </option>
+                  <option value="21600">
+                    6h
+                  </option>
+                  <option value="43200">
+                    12h
+                  </option>
+                  <option value="86400">
+                    24h
+                  </option>
+                  <option value="172800">
+                    2d
+                  </option>
+                  <option value="604800">
+                    1w
+                  </option>
                 </Select>
               </div>
             </OptionSet>
@@ -107,11 +138,22 @@ export default class Form extends Component {
                 <Label>Future:</Label>
               </div>
               <div>
-                <Select innerRef={el => this.futureInput = el}>
-                  <option value="5m">5m</option>
-                  <option value="15m">15m</option>
-                  <option value="30m">30m</option>
-                  <option value="60m">60m</option>
+                <Select
+                  innerRef={el => this.futureInput = el}
+                  defaultValue={defaults.predictFuture}
+                >
+                  <option value="5m">
+                    5m
+                  </option>
+                  <option value="15m">
+                    15m
+                  </option>
+                  <option value="30m">
+                    30m
+                  </option>
+                  <option value="60m">
+                    60m
+                  </option>
                 </Select>
               </div>
             </OptionSet>
@@ -126,7 +168,16 @@ export default class Form extends Component {
               }
             }}
           />
-          <ButtonInput type="button" value="Add Graph" />
+          <ButtonInput
+            type="button"
+            value="Add Graph"
+            onClick={e => {
+              e.preventDefault();
+              if (this.props.onDuplicate) {
+                this.props.onDuplicate(this.formData());
+              }
+            }}
+          />
         </form>
       </FormBox>
     );
