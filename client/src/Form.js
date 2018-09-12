@@ -154,6 +154,9 @@ export default class Form extends Component {
                   <option value="60m">
                     60m
                   </option>
+                  <option value="360m">
+                    6h
+                  </option>
                 </Select>
               </div>
             </OptionSet>
