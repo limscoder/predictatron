@@ -1,11 +1,13 @@
 import React, { Component } from "react";
 import styled from "styled-components";
+import github from "./github.png";
 
 const FormBox = styled.div`
   background-color: #f4f4f4;
   border: 4px solid #58F4CD;
   border-radius: 6px;
   padding: 15px;
+  position: relative;
 `;
 
 const FieldSet = styled.div`
@@ -48,6 +50,12 @@ const Select = styled.select`
   font-family: Helvetica;
   font-size: 24px;
   margin-left: 8px;
+`;
+const GitLink = styled.a`
+  display: block;
+  position: absolute;
+  bottom: 5px;
+  right: 10px;
 `;
 
 export default class Form extends Component {
@@ -182,6 +190,10 @@ export default class Form extends Component {
             }}
           />
         </form>
+
+        <GitLink href="https://github.com/limscoder/predictatron">
+          <img src={github} alt="github" />
+        </GitLink>
       </FormBox>
     );
   }

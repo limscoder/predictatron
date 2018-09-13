@@ -91,7 +91,7 @@ export default class App extends Component {
       graphs: [
         {
           defaults: {
-            promURL: "http://130.211.204.92:9090",
+            promURL: "http://prom.predictatron.net:9090",
             predictMetric: "btc_usd",
             predictMethod: "predict_linear",
             predictPast: "43200",
