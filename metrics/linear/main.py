@@ -11,7 +11,7 @@ durations = [
 
 def linear(request):
   """
-  Coin linear prediction endpoint
+  Linear prediction endpoint
   """
 
   exposition = []
@@ -27,7 +27,7 @@ def linear(request):
       predicted = prom_instant('predict_linear({}[{}m], {})'.format(s, duration['past'], duration['future'] * 60))['data']['result'][0]
       p = {'__name__': n, 'predict_duration': str(duration['future'])}
       for k, v in m.items():
-        if k != '__name__' and not k.startswith('predict'):
+        if k != '__name__' and not k.startswith('predict') and k != 'job':
           p[k] = v
       exposition.append('{} {}'.format(prom_series(p), predicted['value'][1]))
 

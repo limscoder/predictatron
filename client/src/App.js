@@ -45,10 +45,6 @@ function fetchRange(
   const req = new Request(
     `${URL}/api/v1/query_range?query=${e(query)}&start=${e(then)}&end=${e(now)}&step=${e(step)}`
   );
-  console.log(
-    "yo dawg!",
-    `${URL}/api/v1/query_range?query=${e(query)}&start=${e(then)}&end=${e(now)}&step=${e(step)}`
-  );
   return fetch(req, {
     method: "GET",
     mode: "cors",
@@ -78,6 +74,7 @@ function groupDatapoints(queries) {
     if (query.status === "success") {
       const result = query.data.result;
       if (result.length !== 1) {
+        console.warn(result);
         throw new Error(`unexpected series count: ${result.length}`);
       }
       acc[query.target] = result[0];
@@ -128,7 +125,7 @@ export default class App extends Component {
       <AppBox>
         <Header>
           <TitleBox>
-            <Title>predicatron</Title>
+            <Title>predictatron</Title>
             <SubTitle>3000</SubTitle>
           </TitleBox>
           <img src={logo} alt="logo" />

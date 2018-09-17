@@ -1,0 +1,5 @@
+scipy>=0.18
+pandas>=0.18
+statsmodels==0.9.0
+prometheus_client==0.3.1
+git+https://github.com/limscoder/predator.git@1b2a1f5649ec593d44b259dfe57cf06983d3825d#egg=promutil&subdirectory=pkg/promutil

@@ -103,6 +103,9 @@ export default class Form extends Component {
                   <option value="predict_linear">
                     Linear
                   </option>
+                  <option value="predict_arima">
+                    Arima
+                  </option>
                 </Select>
               </div>
             </OptionSet>

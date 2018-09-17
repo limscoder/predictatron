@@ -21,3 +21,10 @@ scrape_configs:
     scheme: http
     static_configs:
     - targets: ['us-central1-starry-tracker-215615.cloudfunctions.net']
+  - job_name: predict-arima
+    scrape_interval: 1m
+    scrape_timeout: 60s
+    metrics_path: /arima
+    scheme: http
+    static_configs:
+    - targets: ['us-central1-starry-tracker-215615.cloudfunctions.net']
