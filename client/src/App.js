@@ -45,6 +45,10 @@ function fetchRange(
   const req = new Request(
     `${URL}/api/v1/query_range?query=${e(query)}&start=${e(then)}&end=${e(now)}&step=${e(step)}`
   );
+  console.log(
+    "yo dawg!",
+    `${URL}/api/v1/query_range?query=${e(query)}&start=${e(then)}&end=${e(now)}&step=${e(step)}`
+  );
   return fetch(req, {
     method: "GET",
     mode: "cors",
