@@ -28,3 +28,30 @@ scrape_configs:
     scheme: http
     static_configs:
     - targets: ['us-central1-starry-tracker-215615.cloudfunctions.net']
+  - job_name: predict-lstm-btc
+    scrape_interval: 2m
+    scrape_timeout: 2m
+    metrics_path: /lstm
+    params:
+      target: ['btc_usd']
+    scheme: http
+    static_configs:
+    - targets: ['us-central1-starry-tracker-215615.cloudfunctions.net']
+  - job_name: predict-lstm-eth
+    scrape_interval: 2m
+    scrape_timeout: 2m
+    metrics_path: /lstm
+    params:
+      target: ['eth_usd']
+    scheme: http
+    static_configs:
+    - targets: ['us-central1-starry-tracker-215615.cloudfunctions.net']
+  - job_name: predict-lstm-bch
+    scrape_interval: 2m
+    scrape_timeout: 2m
+    metrics_path: /lstm
+    params:
+      target: ['bch_usd']
+    scheme: http
+    static_configs:
+    - targets: ['us-central1-starry-tracker-215615.cloudfunctions.net']

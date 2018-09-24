@@ -27,8 +27,8 @@ def coin(request):
     g.set(data['total_supply'])
 
     usd = data['quotes']['USD']
-    g = Gauge('{}_usd'.format(t), '{}/USD price'.format(T), labelnames=['predict_linear', 'predict_arima'], registry=registry)
-    g.labels(predict_linear='true', predict_arima='true').set(usd['price'])
+    g = Gauge('{}_usd'.format(t), '{}/USD price'.format(T), labelnames=['predict_linear', 'predict_arima', 'predict_ltsm'], registry=registry)
+    g.labels(predict_linear='true', predict_arima='true', predict_ltsm='true').set(usd['price'])
     g = Gauge('{}_vol'.format(t), '{} volume'.format(T), registry=registry)
     g.set(usd['volume_24h'])
 

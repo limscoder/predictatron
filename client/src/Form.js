@@ -106,6 +106,9 @@ export default class Form extends Component {
                   <option value="predict_arima">
                     Arima
                   </option>
+                  <option value="predict_lstm">
+                    LSTM
+                  </option>
                 </Select>
               </div>
             </OptionSet>

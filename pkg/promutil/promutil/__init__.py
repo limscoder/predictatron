@@ -17,7 +17,8 @@ def prom_range(q, start, end, step=10):
     'end': end.isoformat() + 'Z',
     'step': str(step)
   }
-  url = 'http://{}/api/v1/query_range?{}'.format(os.environ['PROMCON'], parse.urlencode(params))
+  domain = os.environ['PROMCON'] if 'PROMCON' in os.environ else "prom.predictatron.net:9090"
+  url = 'http://{}/api/v1/query_range?{}'.format(domain, parse.urlencode(params))
   logging.info('prom range query: {}'.format(url))
   with request.urlopen(url) as resp:
     return json.loads(resp.read())

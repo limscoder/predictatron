@@ -58,9 +58,13 @@ function fetchRange(
         content.data.result = content.data.result.map(result => {
           return {
             ...result,
-            values: result.values.map(value => {
-              return [value[0] + offsetSeconds, value[1]];
-            })
+            values: result.values.reduce((acc, value) => {
+              const y = value[1];
+              if (y !== null && !isNaN(y) && typeof y !== "undefined") {
+                acc.push([value[0] + offsetSeconds, y]);
+              }
+              return acc;
+            }, [])
           };
         });
       }
