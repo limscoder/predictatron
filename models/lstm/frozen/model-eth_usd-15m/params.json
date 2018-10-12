@@ -1,1 +1,1 @@
-{"columns": ["bch_supply", "bch_usd", "bch_vol", "btc_supply", "btc_usd", "btc_vol", "eth_supply", "eth_usd", "eth_vol"]}
+{"input_steps": 25, "output_steps": 15, "columns": ["bch_supply", "bch_usd", "bch_vol", "btc_supply", "btc_usd", "btc_vol", "eth_supply", "eth_usd", "eth_vol"]}

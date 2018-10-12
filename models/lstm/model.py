@@ -94,13 +94,13 @@ def plot(history):
   pyplot.legend()
   pyplot.show()
 
-def train(target, future, graph=False):
+def train(target, future, graph=False):  
   in_step=25
   out_step=future
   data = load_data(target, in_step, out_step)
   sets = split_data(data)
 
-  # train model  
+  # train model
   model = compile(sets, 100)
   history = model.fit(
     sets['train_X'],
@@ -113,13 +113,26 @@ def train(target, future, graph=False):
 
   # save model
   model_key = 'model-{}-{}m'.format(target, future)
-  tfjs.converters.save_keras_model(model, 'frozen/{}'.format(model_key))
-  model_params = {'columns': []}
+  model_path = 'frozen/{}'.format(model_key)
+  # for use in js
+  tfjs.converters.save_keras_model(model, model_path)
+  # for use in golang
+  tf_path = 'frozen-tf/{}'.format(model_key)
+  builder = tf.saved_model.builder.SavedModelBuilder(tf_path)
+  builder.add_meta_graph_and_variables(backend.get_session(),[model_key])
+  builder.save()
+  # model metadata
+  model_params = {
+    'input_steps': in_step,
+    'output_steps': out_step,
+    'columns': []}
   column_count = int((len(data.columns) - 1) / in_step)
   for idx in range(column_count):
     parts = data.columns[idx].split(':')
     model_params['columns'].append(parts[1].split('(')[0])
-  with open('frozen/{}/params.json'.format(model_key), 'w') as out:
+  with open('{}/params.json'.format(model_path), 'w') as out:
+    json.dump(model_params, out)
+  with open('{}/params.json'.format(tf_path), 'w') as out:
     json.dump(model_params, out)
   
   # plot model
