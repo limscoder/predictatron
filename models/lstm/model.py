@@ -123,6 +123,7 @@ def train(target, future, graph=False):
   builder.save()
   # model metadata
   model_params = {
+    'model_key': model_key,
     'input_steps': in_step,
     'output_steps': out_step,
     'columns': []}
