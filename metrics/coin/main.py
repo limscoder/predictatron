@@ -23,14 +23,13 @@ def coin(request):
     t = ticker['ticker']
     T = t.upper()
     data = market.ticker(ticker['marketcap_id'], convert='USD')['data']
-    g = Gauge('{}_supply'.format(t), '{} supply'.format(T), registry=registry)
-    g.set(data['total_supply'])
+    g = Gauge('{}_supply'.format(t), '{} supply'.format(T), labelnames=['ft_target'], registry=registry)
+    g.labels(ft_target='true').set(data['total_supply'])
 
     usd = data['quotes']['USD']
     g = Gauge('{}_usd'.format(t), '{}/USD price'.format(T), labelnames=['predict_linear', 'predict_arima', 'predict_ltsm', 'ft_target'], registry=registry)
-    target = 'true' if 'target' in ticker and ticker['target'] is True else 'false'
-    g.labels(predict_linear='true', predict_arima='true', predict_ltsm='true', ft_target=target).set(usd['price'])
-    g = Gauge('{}_vol'.format(t), '{} volume'.format(T), registry=registry)
-    g.set(usd['volume_24h'])
+    g.labels(predict_linear='true', predict_arima='true', predict_ltsm='true', ft_target='true').set(usd['price'])
+    g = Gauge('{}_vol'.format(t), '{} volume'.format(T),  labelnames=['ft_target'], registry=registry)
+    g.labels(ft_target='true').set(usd['volume_24h'])
 
   return Response(generate_latest(registry), mimetype="text/plain")
