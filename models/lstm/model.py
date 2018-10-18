@@ -83,8 +83,8 @@ def split_data(data, test_ratio=0.25):
 
 def compile(data, layer_size):
   model = Sequential()
-  model.add(LSTM(layer_size, input_shape=(data['train_X'].shape[1], data['train_X'].shape[2])))
-  model.add(Dense(1))
+  model.add(LSTM(layer_size, input_shape=(data['train_X'].shape[1], data['train_X'].shape[2]), name="predictatronInput"))
+  model.add(Dense(1, activation='sigmoid', name="predictatronOutput"))
   model.compile(loss='mae', optimizer='adam')
   return model
 
@@ -123,9 +123,13 @@ def train(target, future, graph=False):
   builder.save()
   # model metadata
   model_params = {
+    'target': target,
     'model_key': model_key,
+    'input_operation': 'predictatronInput_input',
     'input_steps': in_step,
     'output_steps': out_step,
+    'output_operation': 'predictatronOutput/Sigmoid',
+    'predict_future_duration': future,
     'columns': []}
   column_count = int((len(data.columns) - 1) / in_step)
   for idx in range(column_count):
