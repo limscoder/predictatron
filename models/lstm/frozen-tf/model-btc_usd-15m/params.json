@@ -1,1 +1,1 @@
-{"model_key": "btc_usd-15m", "input_steps": 25, "output_steps": 15, "target": "btc_usd", "columns": ["bch_supply", "bch_usd", "bch_vol", "btc_supply", "btc_usd", "btc_vol", "eth_supply", "eth_usd", "eth_vol"]}
+{"target": "btc_usd", "model_key": "model-btc_usd-15m", "input_name": "inputLayer", "input_steps": 25, "output_steps": 15, "output_name": "outputLayer", "columns": ["bch_supply", "bch_usd", "bch_vol", "btc_supply", "btc_usd", "btc_vol", "eth_supply", "eth_usd", "eth_vol"]}
