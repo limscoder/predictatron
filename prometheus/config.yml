@@ -55,3 +55,10 @@ scrape_configs:
     scheme: http
     static_configs:
     - targets: ['us-central1-starry-tracker-215615.cloudfunctions.net']
+  - job_name: predict-sidecar
+    scrape_interval: 1m
+    scrape_timeout: 60s
+    metrics_path: /metrics
+    scheme: http
+    static_configs:
+    - targets: ['104.154.136.152:8077']

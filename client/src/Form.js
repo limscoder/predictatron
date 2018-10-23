@@ -109,6 +109,9 @@ export default class Form extends Component {
                   <option value="predict_lstm">
                     LSTM
                   </option>
+                  <option value="ft_predict_sidecar">
+                    Sidecar
+                  </option>
                 </Select>
               </div>
             </OptionSet>
